@@ -1,4 +1,9 @@
 
+1.4.4 / 2016-01-10
+==================
+
+  * package: bump `engine.io`
+
 1.4.3 / 2016-01-08
 ==================
 
@@ -41,6 +46,7 @@
   * package: bump `has-binary` to work with all objects (fixes #1955)
   * fix origin verification default https port [evanlucas]
   * support compression [nkzawa]
+  * changed type of `Client#sockets`, `Namespace#sockets` and `Socket#rooms` to maps (instead of arrays)
 
 1.3.7 / 2015-09-21
 ==================
