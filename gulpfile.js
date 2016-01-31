@@ -53,7 +53,7 @@ gulp.task('istanbul-pre-test', function () {
 });
 
 gulp.task('test-cov', ['istanbul-pre-test'], function(){
-  gulp.src(['test/socket.io.js'])
+  return gulp.src(['test/socket.io.js'])
     .pipe(mocha({
       reporter: 'dot'
     }))
