@@ -4,9 +4,11 @@ const istanbul = require('gulp-istanbul');
 const babel = require("gulp-babel");
 const help = require("gulp-task-listing");
 const eslint = require("gulp-eslint");
+const del = require("del");
 
+gulp.task("help", help);
 
-gulp.task("default", ["lint", "test"]);
+gulp.task("default", ["lint", "test", "transpile"]);
 
 gulp.task("lint", function () {
   return gulp.src(["**/*.js", "!node_modules/**", "!examples/**"])
@@ -16,10 +18,15 @@ gulp.task("lint", function () {
 });
 
 // By default, individual js files are transformed by babel and exported to /dist
-gulp.task("babel", function () {
+const TRANSPILE_DEST_DIR = "./dist";
+gulp.task("transpile", function () {
   return gulp.src("lib/*.js")
     .pipe(babel({ "presets": ["es2015"] }))
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest(TRANSPILE_DEST_DIR));
+});
+
+gulp.task("clean", function () {
+  return del([TRANSPILE_DEST_DIR]);
 });
 
 gulp.task('test', function(){
