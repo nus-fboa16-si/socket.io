@@ -1,7 +1,19 @@
-var gulp = require('gulp');
-var mocha = require('gulp-mocha');
-var istanbul = require('gulp-istanbul');
-var babel = require("gulp-babel");
+const gulp = require('gulp');
+const mocha = require('gulp-mocha');
+const istanbul = require('gulp-istanbul');
+const babel = require("gulp-babel");
+const help = require("gulp-task-listing");
+const eslint = require("gulp-eslint");
+
+
+gulp.task("default", ["lint", "test"]);
+
+gulp.task("lint", function () {
+  return gulp.src(["**/*.js", "!node_modules/**", "!examples/**"])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+});
 
 // By default, individual js files are transformed by babel and exported to /dist
 gulp.task("babel", function () {
