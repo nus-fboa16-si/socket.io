@@ -145,17 +145,16 @@ Namespace.prototype.to = Namespace.prototype['in'] = function (name) {
  */
 
 Namespace.prototype.add = function (client, fn) {
-  var _this = this;
-
   debug('adding socket to nsp %s', this.name);
   var socket = new Socket(this, client);
+  var self = this;
   this.run(socket, function (err) {
     process.nextTick(function () {
       if ('open' == client.conn.readyState) {
         if (err) return socket.error(err.data || err.message);
 
         // track socket
-        _this.sockets[socket.id] = socket;
+        self.sockets[socket.id] = socket;
 
         // it's paramount that the internal `onconnect` logic
         // fires before user-set events to prevent state order
@@ -165,8 +164,8 @@ Namespace.prototype.add = function (client, fn) {
         if (fn) fn();
 
         // fire user-set events
-        _this.emit('connect', socket);
-        _this.emit('connection', socket);
+        self.emit('connect', socket);
+        self.emit('connection', socket);
       } else {
         debug('next called after client was closed - ignoring socket');
       }

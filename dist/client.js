@@ -60,8 +60,6 @@ Client.prototype.setup = function () {
  */
 
 Client.prototype.connect = function (name) {
-  var _this = this;
-
   debug('connecting to namespace %s', name);
   var nsp = this.server.nsps[name];
   if (!nsp) {
@@ -74,13 +72,14 @@ Client.prototype.connect = function (name) {
     return;
   }
 
+  var self = this;
   var socket = nsp.add(this, function () {
-    _this.sockets[socket.id] = socket;
-    _this.nsps[nsp.name] = socket;
+    self.sockets[socket.id] = socket;
+    self.nsps[nsp.name] = socket;
 
-    if ('/' == nsp.name && _this.connectBuffer.length > 0) {
-      _this.connectBuffer.forEach(_this.connect, _this);
-      _this.connectBuffer = [];
+    if ('/' == nsp.name && self.connectBuffer.length > 0) {
+      self.connectBuffer.forEach(self.connect, self);
+      self.connectBuffer = [];
     }
   });
 };

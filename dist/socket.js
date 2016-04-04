@@ -209,9 +209,8 @@ Socket.prototype.packet = function (packet, opts) {
  */
 
 Socket.prototype.join = function (room, fn) {
-  var _this = this;
-
   debug('joining room %s', room);
+  var self = this;
   if (this.rooms.hasOwnProperty(room)) {
     fn && fn(null);
     return this;
@@ -219,7 +218,7 @@ Socket.prototype.join = function (room, fn) {
   this.adapter.add(this.id, room, function (err) {
     if (err) return fn && fn(err);
     debug('joined room %s', room);
-    _this.rooms[room] = room;
+    self.rooms[room] = room;
     fn && fn(null);
   });
   return this;
@@ -235,13 +234,12 @@ Socket.prototype.join = function (room, fn) {
  */
 
 Socket.prototype.leave = function (room, fn) {
-  var _this2 = this;
-
   debug('leave room %s', room);
+  var self = this;
   this.adapter.del(this.id, room, function (err) {
     if (err) return fn && fn(err);
     debug('left room %s', room);
-    delete _this2.rooms[room];
+    delete self.rooms[room];
     fn && fn(null);
   });
   return this;
@@ -337,14 +335,11 @@ Socket.prototype.ack = function (id) {
   var self = this;
   var sent = false;
   return function () {
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
     // prevent double callbacks
     if (sent) return;
-    // var args = Array.prototype.slice.call(arguments);
+    var args = Array.prototype.slice.call(arguments);
     debug('sending ack %j', args);
+
     var type = hasBin(args) ? parser.BINARY_ACK : parser.ACK;
     self.packet({
       id: id,

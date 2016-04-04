@@ -241,15 +241,14 @@ Server.prototype.listen = Server.prototype.attach = function (srv, opts) {
  */
 
 Server.prototype.attachServe = function (srv) {
-  var _this = this;
-
   debug('attaching client serving req handler');
   var url = this._path + '/socket.io.js';
   var evs = srv.listeners('request').slice(0);
+  var self = this;
   srv.removeAllListeners('request');
   srv.on('request', function (req, res) {
     if (0 === req.url.indexOf(url)) {
-      _this.serve(req, res);
+      self.serve(req, res);
     } else {
       for (var i = 0; i < evs.length; i++) {
         evs[i].call(srv, req, res);
